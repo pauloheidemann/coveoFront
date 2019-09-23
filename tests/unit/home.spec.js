@@ -6,6 +6,6 @@ describe("HelloWorld.vue", () => {
   it("Primeiro teste", () => {
     const wrapper = shallowMount(Coveo);
     console.log(wrapper.find("h1").text());
-    expect(wrapper.find("h1").text());
+    expect(wrapper.find("h1").text()).equal("Teste");
   });
 });
