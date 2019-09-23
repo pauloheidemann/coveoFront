@@ -49,7 +49,7 @@ export default {
     }
   },
   created() {
-    this.$http.post('http://localhost:8080/v1/coveo', " ")
+    this.$http.post('http://localhost:8080/coveo/v1/coveo', " ")
       .then(res => res.json())
       .then(wines => this.wines = wines, err => console.log('erro ' + err));
   },
@@ -68,7 +68,7 @@ export default {
         mountedFilter = mountedFilter + " @tpcategorie=Vin rouge "
       }
       console.log(mountedFilter);     
-      this.$http.post('http://localhost:8080/v1/coveo', mountedFilter)
+      this.$http.post('http://localhost:8080/coveo/v1/coveo', mountedFilter)
       .then(res => res.json())
       .then(wines => this.wines = wines, err => console.log('erro ' + err));
     }
