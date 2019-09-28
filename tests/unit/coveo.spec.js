@@ -5,6 +5,7 @@ import expect from 'expect';
 
 describe("Coveo.vue", () => {
   let wrapper;
+  const ACCESS_TOKEN = "058c85fd-3c79-42a3-9236-b83d35588103"
 
   // Helper Functions
   let see = (text, selector) => {
@@ -32,7 +33,7 @@ describe("Coveo.vue", () => {
 
   it("POST request to get all wines", (done) => {
     //stubs a request to retrieve all wines
-    moxios.stubRequest("http://localhost:8080/coveo/v1/coveo/all", {
+    moxios.stubRequest("https://cloudplatform.coveo.com/rest/search?access_token=" + ACCESS_TOKEN, {
       status: 200,
       responseText: {
         data : [

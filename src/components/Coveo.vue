@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="side-menu">
-      <form @submit.prevent="search()">
         <div class="controle">
           <label for="searchField">Generic search</label>
           <input id="searchField" v-model="filter" />
@@ -16,7 +15,6 @@
           <input type="checkbox" name="redWine" value="Vin rouge" v-model="redWine" />Red Wine
         </div>
         <button id="search" @click="search()">Search</button>
-      </form>
     </div>
     <div id="wines-list">
       <li class="wines" v-for="wine of wines">
@@ -42,7 +40,8 @@ export default {
       filterTitle: "",
       whiteWine: "",
       redWine: "",
-      mountedFilter: ""
+      mountedFilter: "",
+      ACCESS_TOKEN: "058c85fd-3c79-42a3-9236-b83d35588103" // ACCESS_TOKEN to the coveo API
     }
   },
   created() {
@@ -62,11 +61,16 @@ export default {
         this.mountedFilter = this.mountedFilter + " @tpcategorie=Vin rouge "
       }
       if(this.mountedFilter != '') {
-        axios.post("http://localhost:8080/coveo/v1/coveo", this.mountedFilter)
-          .then(response => this.wines = response.data, err => console.log('erro ' + err.data));
+        //Uses the filter that was mounted to execute the query
+        axios.get("https://cloudplatform.coveo.com/rest/search?access_token=" + this.ACCESS_TOKEN, {
+          params: {
+            q: this.mountedFilter
+          }
+        }).then(response => this.wines = response.data.results, err => console.log('erro ' + err.data));
       } else {
-        axios.post("http://localhost:8080/coveo/v1/coveo/all")
-          .then(response => this.wines = response.data, err => console.log("erro all " + err.data));
+        //Makes the request to retrieve the wines without a filter
+        axios.post("https://cloudplatform.coveo.com/rest/search?access_token=" + this.ACCESS_TOKEN)
+          .then(response => this.wines = response.data.results, err => console.log("erro all " + err));
       }
       this.mountedFilter = "";
     }
