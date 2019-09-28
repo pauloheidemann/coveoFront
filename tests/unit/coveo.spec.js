@@ -2,6 +2,10 @@ import { shallowMount } from "@vue/test-utils";
 import Coveo from "@/components/Coveo.vue";
 import moxios from "moxios";
 import expect from 'expect';
+import Vue from "vue";
+import Dialog from 'vue-dialog-loading';
+
+Vue.use(Dialog);
 
 describe("Coveo.vue", () => {
   let wrapper;

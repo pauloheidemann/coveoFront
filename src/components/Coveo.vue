@@ -50,6 +50,8 @@ export default {
   },
   methods: {
     search() {
+      let loader = this.$loading;
+      loader.show();
       if(this.filter != "")
         this.mountedFilter = this.mountedFilter + this.filter;
       if(this.filterTitle != '')
@@ -62,11 +64,19 @@ export default {
         this.mountedFilter = this.mountedFilter + " @tpcategorie=Vin rouge "
       }
       if(this.mountedFilter != '') {
-        axios.post("http://localhost:8080/coveo/v1/coveo", this.mountedFilter)
-          .then(response => this.wines = response.data, err => console.log('erro ' + err.data));
+        axios.post("http://localhost:8080/coveo/v1/coveo", {
+          params: this.mountedFilter
+        })
+          .then(response => {
+            this.wines = response.data,
+            loader.hide();
+          }, err => console.log('erro ' + err.data));
       } else {
         axios.post("http://localhost:8080/coveo/v1/coveo/all")
-          .then(response => this.wines = response.data, err => console.log("erro all " + err.data));
+          .then(response => {
+            this.wines = response.data,
+            loader.hide();
+          }, err => console.log("erro all " + err.data));
       }
       this.mountedFilter = "";
     }
