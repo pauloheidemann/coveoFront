@@ -49,6 +49,8 @@ export default {
   },
   methods: {
     search() {
+      let loader = this.$loading;
+      loader.show();
       if(this.filter != "")
         this.mountedFilter = this.mountedFilter + this.filter;
       if(this.filterTitle != '')
@@ -66,11 +68,24 @@ export default {
           params: {
             q: this.mountedFilter
           }
-        }).then(response => this.wines = response.data.results, err => console.log('erro ' + err.data));
+        }).then(response => {
+          this.wines = response.data.results;
+          loader.hide();
+        }, err => {
+          console.log('erro ' + err.data);
+          loader.hide();
+        });
       } else {
         //Makes the request to retrieve the wines without a filter
         axios.post("https://cloudplatform.coveo.com/rest/search?access_token=" + this.ACCESS_TOKEN)
-          .then(response => this.wines = response.data.results, err => console.log("erro all " + err));
+          .then(response => {
+            this.wines = response.data.results;
+            loader.hide();
+            }, 
+          err => {
+            console.log("erro all " + err);
+            loader.hide();
+          });
       }
       this.mountedFilter = "";
     }
